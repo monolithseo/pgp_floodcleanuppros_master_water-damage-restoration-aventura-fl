@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: monolithseo/pgp_floodcleanuppros_master
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MASTER_REPO_TOKEN }}
           path: master-repo
           
       - name: Copy shared WordPress assets
