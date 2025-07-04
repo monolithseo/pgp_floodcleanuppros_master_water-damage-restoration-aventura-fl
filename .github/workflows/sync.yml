@@ -1,0 +1,75 @@
+name: Sync from Master Repo
+on:
+  # Manual trigger for testing
+  workflow_dispatch:
+  
+  # Repository dispatch (for n8n to trigger)
+  repository_dispatch:
+    types: [sync-trigger]
+
+# Variables - CHANGE THIS for each city repo
+env:
+  CITY_FOLDER: "water-damage-restoration-aventura-fl"
+
+jobs:
+  sync-content:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Clear existing content (except .git and .github)
+        run: |
+          # Remove everything except .git and .github
+          find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.github' -exec rm -rf {} + 2>/dev/null || true
+          
+      - name: Clone master repo
+        run: |
+          git clone https://github.com/monolithseo/pgp_floodcleanuppros_master.git master-repo
+          
+      - name: Copy shared WordPress assets
+        run: |
+          # Copy wp-content and wp-includes
+          cp -r master-repo/wp-content ./wp-content 2>/dev/null || echo "wp-content not found"
+          cp -r master-repo/wp-includes ./wp-includes 2>/dev/null || echo "wp-includes not found"
+          
+      - name: Copy city-specific content
+        run: |
+          # Copy everything from the specific city folder
+          cp -r master-repo/cities/${{ env.CITY_FOLDER }}/* ./ 2>/dev/null || echo "City folder not found"
+          
+      - name: Replace city folder path references in HTML
+        run: |
+          # Replace /cities/[city-folder]/ with / in HTML files only
+          find . -name "*.html" -type f -exec sed -i 's|/cities/${{ env.CITY_FOLDER }}/|/|g' {} \; 2>/dev/null || true
+          
+      - name: Clean up unwanted files
+        run: |
+          # Remove .DS_Store files everywhere
+          find . -name ".DS_Store" -type f -delete 2>/dev/null || true
+          # Remove the cloned master repo
+          rm -rf master-repo
+          
+      - name: Show what we have
+        run: |
+          echo "Synced content for: ${{ env.CITY_FOLDER }}"
+          echo "Files in root directory:"
+          ls -la
+          echo "Structure:"
+          find . -maxdepth 2 -type d | head -20
+          
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Sync from master repo: ${{ env.CITY_FOLDER }} - $(date)"
+            git push
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
