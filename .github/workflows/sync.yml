@@ -25,9 +25,12 @@ jobs:
           # Remove everything except .git and .github
           find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.github' -exec rm -rf {} + 2>/dev/null || true
           
-      - name: Clone master repo
-        run: |
-          git clone https://github.com/monolithseo/pgp_floodcleanuppros_master.git master-repo
+      - name: Checkout master repo
+        uses: actions/checkout@v4
+        with:
+          repository: monolithseo/pgp_floodcleanuppros_master
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: master-repo
           
       - name: Copy shared WordPress assets
         run: |
