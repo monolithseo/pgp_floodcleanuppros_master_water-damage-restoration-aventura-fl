@@ -1,0 +1,16 @@
+/*
+ Theme Name:   LT Theme
+ Theme URI:    https://generatepress.com
+ Description:  Customised GeneratePress child theme
+ Author:       LT
+ Author URI:   https://tomusborne.com
+ Template:     generatepress
+ Version:      0.1
+*/
+
+/*** 1. THEME TWEAKS ***/
+
+/* Set the main content area height */
+#main {
+    min-height: 60vh;
+}

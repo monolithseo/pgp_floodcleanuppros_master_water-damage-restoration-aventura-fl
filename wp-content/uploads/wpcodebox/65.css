@@ -1,0 +1,19 @@
+/* Full width overrides */
+.full-width-content .container.grid-container {
+    max-width: 100% !important;
+}
+
+/* Version with more controls - but doesn't seem needed */
+/*
+.full-width-content .container.grid-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;    
+}
+*/
+
+/* Center Relume container */
+.container {
+    margin-left: auto;
+    margin-right: auto;
+}

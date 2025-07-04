@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="80">
+  <g transform="translate(10, 15)">
+    <svg width="50" height="50" viewBox="0 0 24 24">
+      <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" fill="#4c5282"></path>
+    </svg>
+  </g>
+  <text x="65" y="45" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#4c5282" dominant-baseline="middle">Flood Cleanup Today™</text>
+</svg>
