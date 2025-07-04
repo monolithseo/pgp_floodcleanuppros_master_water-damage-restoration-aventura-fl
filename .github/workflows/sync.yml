@@ -1,0 +1,32 @@
+name: Test Sync Workflow
+on:
+  # Manual trigger for testing
+  workflow_dispatch:
+  
+  # Repository dispatch (for n8n to trigger later)
+  repository_dispatch:
+    types: [sync-trigger]
+
+jobs:
+  test-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+        
+      - name: Show current files
+        run: |
+          echo "Current files in repo:"
+          ls -la
+          
+      - name: Create a test file
+        run: |
+          echo "Test sync ran at $(date)" > last-sync.txt
+          
+      - name: Commit changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Test sync at $(date)" || echo "No changes to commit"
+          git push
